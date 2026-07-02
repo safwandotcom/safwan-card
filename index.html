@@ -557,9 +557,13 @@ body.has-fine-pointer,body.has-fine-pointer a,body.has-fine-pointer button{curso
 @keyframes orbdrift{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
 @media(prefers-reduced-motion:reduce){.orb-a,.orb-b,.orb-c{animation:none}}
 .hero,.ticker-wrap,section,footer{position:relative;z-index:1}
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:1000;background:rgba(255,255,255,.05)}
+.scroll-progress-bar{height:100%;width:100%;transform:scaleX(0);transform-origin:0 0;background:var(--glow-grad);transition:transform .1s linear}
 </style>
 </head>
 <body>
+
+<div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar"></div></div>
 
 <div class="orb-wrap orb-wrap-a" aria-hidden="true"><div class="orb orb-a"></div></div>
 <div class="orb-wrap orb-wrap-b" aria-hidden="true"><div class="orb orb-b"></div></div>
@@ -1004,6 +1008,13 @@ if(MOTION_ON){
     orbWraps.forEach((w,i)=>{ w.style.transform=`translate(${nx*(i+1)*14}px, ${ny*(i+1)*14}px)`; });
   });
 }
+
+const progressBar=document.querySelector('.scroll-progress-bar');
+window.addEventListener('scroll', ()=>{
+  const h=document.documentElement;
+  const pct=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  progressBar.style.transform=`scaleX(${pct})`;
+},{passive:true});
 
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
