@@ -955,6 +955,24 @@ if(MOTION_ON){
   });
 }
 
+if(MOTION_ON){
+  const tiltEls=document.querySelectorAll('.hs,.sc-stat,.sk-cell,.exp-item,.ps,.feat,.edu-card,.proj,.cert,.c-link');
+  const cRing=document.querySelector('.cursor-ring');
+  tiltEls.forEach(el=>{
+    el.addEventListener('pointerenter', ()=>{ if(cRing) cRing.classList.add('hover'); });
+    el.addEventListener('pointerleave', ()=>{
+      if(cRing) cRing.classList.remove('hover');
+      el.style.transform='';
+    });
+    el.addEventListener('pointermove', e=>{
+      const r=el.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width-.5;
+      const py=(e.clientY-r.top)/r.height-.5;
+      el.style.transform=`perspective(600px) rotateX(${py*-6}deg) rotateY(${px*6}deg)`;
+    });
+  });
+}
+
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
 },{threshold:.06,rootMargin:'0px 0px -50px 0px'});
