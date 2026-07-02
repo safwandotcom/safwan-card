@@ -514,6 +514,17 @@ footer{
 }
 footer a{color:var(--violet2);text-decoration:none}
 
+/* ── GLASS SYSTEM ── */
+.hs,.sc-stat,.sk-cell,.exp-item,.ps,.feat,.edu-card,.proj,.cert,.c-link,.sb{
+  background:var(--glass-bg);
+  backdrop-filter:blur(var(--glass-blur));
+  -webkit-backdrop-filter:blur(var(--glass-blur));
+  border-color:var(--glass-border);
+}
+.hero-status,.exp-badge,.hero-chip,.atag,.etag{
+  box-shadow:0 0 0 1px rgba(159,103,255,.25),0 0 16px rgba(159,103,255,.18);
+}
+
 /* ── RESPONSIVE ── */
 @media(max-width:960px){
   nav{padding:0 1.5rem}
