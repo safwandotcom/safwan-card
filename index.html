@@ -171,7 +171,7 @@ h1.hero-h1 .line2{
   background:transparent;color:var(--text);
   padding:.8rem 2rem;border-radius:8px;text-decoration:none;
   border:1px solid var(--border);
-  transition:border-color .2s,background .2s;
+  transition:border-color .2s,background .2s,transform .15s var(--ease);
 }
 .btn-o:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
 
@@ -933,6 +933,25 @@ if(MOTION_ON){
     cDot.style.transform =`translate3d(${pointer.x}px,${pointer.y}px,0) translate(-50%,-50%)`;
     cRing.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
     cSpot.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+  });
+}
+
+if(MOTION_ON){
+  const magnets=document.querySelectorAll('.btn-p,.btn-o,.nav-cta,.pre-cta');
+  const MAG_RADIUS=90, MAG_STRENGTH=14;
+  document.addEventListener('pointerease', ()=>{
+    magnets.forEach(m=>{
+      const r=m.getBoundingClientRect();
+      const cx=r.left+r.width/2, cy=r.top+r.height/2;
+      const dx=pointer.x-cx, dy=pointer.y-cy;
+      const dist=Math.hypot(dx,dy);
+      if(dist<MAG_RADIUS){
+        const pull=(1-dist/MAG_RADIUS)*MAG_STRENGTH;
+        m.style.transform=`translate(${(dx/dist||0)*pull}px, ${(dy/dist||0)*pull}px)`;
+      } else {
+        m.style.transform='';
+      }
+    });
   });
 }
 
