@@ -544,7 +544,8 @@ body.has-fine-pointer,body.has-fine-pointer a,body.has-fine-pointer button{curso
 .orb-b{width:360px;height:360px;top:40vh;left:calc(100vw - 220px);background:var(--orb-b);animation:orbdrift 28s ease-in-out infinite reverse}
 .orb-c{width:300px;height:300px;top:calc(100vh - 200px);left:30vw;background:var(--orb-c);animation:orbdrift 25s ease-in-out infinite}
 @keyframes orbdrift{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
-nav,.hero,.ticker-wrap,section,footer{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.orb-a,.orb-b,.orb-c{animation:none}}
+.hero,.ticker-wrap,section,footer{position:relative;z-index:1}
 </style>
 </head>
 <body>
