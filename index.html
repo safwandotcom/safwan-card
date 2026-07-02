@@ -559,6 +559,10 @@ body.has-fine-pointer,body.has-fine-pointer a,body.has-fine-pointer button{curso
 .hero,.ticker-wrap,section,footer{position:relative;z-index:1}
 .scroll-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:1000;background:rgba(255,255,255,.05)}
 .scroll-progress-bar{height:100%;width:100%;transform:scaleX(0);transform-origin:0 0;background:var(--glow-grad);transition:transform .1s linear}
+.kw{display:inline-block;opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity .5s var(--ease),transform .5s var(--ease),filter .5s var(--ease)}
+.reveal.in .kw{opacity:1;filter:blur(0);transform:translateY(0)}
+@keyframes kwglow{0%{text-shadow:0 0 0 rgba(159,103,255,0)}40%{text-shadow:0 0 16px rgba(159,103,255,.55)}100%{text-shadow:0 0 0 rgba(159,103,255,0)}}
+.reveal.in .kw{animation:kwglow .8s var(--ease) forwards}
 </style>
 </head>
 <body>
@@ -1016,6 +1020,37 @@ window.addEventListener('scroll', ()=>{
   const pct=max>0? h.scrollTop/max : 0;
   progressBar.style.transform=`scaleX(${pct})`;
 },{passive:true});
+
+function splitWords(root){
+  const walk=(node)=>{
+    Array.from(node.childNodes).forEach(child=>{
+      if(child.nodeType===3 && child.textContent.trim()){
+        const frag=document.createDocumentFragment();
+        child.textContent.split(/(\s+)/).forEach(part=>{
+          if(part.trim()===''){ frag.appendChild(document.createTextNode(part)); }
+          else{ const span=document.createElement('span'); span.className='kw'; span.textContent=part; frag.appendChild(span); }
+        });
+        child.replaceWith(frag);
+      } else if(child.nodeType===1 && child.tagName!=='BR'){
+        walk(child);
+      }
+    });
+  };
+  walk(root);
+  root.querySelectorAll('.kw').forEach((w,i)=>{
+    w.style.transitionDelay = w.style.animationDelay = (i*35)+'ms';
+  });
+}
+if(!REDUCE_MOTION){
+  document.querySelectorAll('.kicker,.sec-h').forEach(splitWords);
+}
+
+if(!REDUCE_MOTION){
+  const watermark=document.querySelector('.hero-watermark');
+  window.addEventListener('scroll', ()=>{
+    watermark.style.transform=`translateY(${window.scrollY*.15}px)`;
+  }, {passive:true});
+}
 
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
