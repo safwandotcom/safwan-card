@@ -1012,7 +1012,8 @@ if(MOTION_ON){
 const progressBar=document.querySelector('.scroll-progress-bar');
 window.addEventListener('scroll', ()=>{
   const h=document.documentElement;
-  const pct=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  const max=h.scrollHeight-h.clientHeight;
+  const pct=max>0? h.scrollTop/max : 0;
   progressBar.style.transform=`scaleX(${pct})`;
 },{passive:true});
 
