@@ -1052,6 +1052,31 @@ if(!REDUCE_MOTION){
   }, {passive:true});
 }
 
+function countUp(el){
+  const raw=el.textContent.trim();
+  const match=raw.match(/^([\d.]+)(.*)$/);
+  if(!match) return;
+  const target=parseFloat(match[1]);
+  const suffix=match[2];
+  const isInt=Number.isInteger(target);
+  const dur=900;
+  const start=performance.now();
+  (function step(now){
+    const p=Math.min((now-start)/dur,1);
+    const e=1-Math.pow(1-p,3);
+    const val=target*e;
+    el.textContent=(isInt? Math.round(val): val.toFixed(1))+suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent=raw;
+  })(start);
+}
+if(!REDUCE_MOTION){
+  const numObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ countUp(e.target); numObs.unobserve(e.target); } });
+  },{threshold:.4});
+  document.querySelectorAll('.hs .n,.sc-stat .n,.ps .n').forEach(el=>numObs.observe(el));
+}
+
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
 },{threshold:.06,rootMargin:'0px 0px -50px 0px'});
