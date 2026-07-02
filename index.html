@@ -538,7 +538,7 @@ footer a{color:var(--violet2);text-decoration:none}
   box-shadow:0 0 0 1px rgba(159,103,255,.25),0 0 16px rgba(159,103,255,.18);
 }
 
-.feats .feat{opacity:0;transform:translateY(24px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.feats .feat{opacity:0;transform:translateY(24px);transition:opacity .55s var(--ease)}
 .feats .feat:nth-child(1){transition-delay:.05s}
 .feats .feat:nth-child(2){transition-delay:.15s}
 .feats .feat:nth-child(3){transition-delay:.25s}
@@ -546,6 +546,7 @@ footer a{color:var(--violet2);text-decoration:none}
 .feats .feat:nth-child(5){transition-delay:.45s}
 .feats .feat:nth-child(6){transition-delay:.55s}
 .pre-sec.in .feats .feat{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.feats .feat{transition:none;opacity:1;transform:none}}
 .pre-tag{font-family:var(--mono);font-size:.78rem;color:var(--cyan);letter-spacing:.03em;margin-bottom:1.1rem}
 
 /* ── RESPONSIVE ── */
@@ -997,9 +998,13 @@ if(MOTION_ON){
 if(MOTION_ON){
   const magnets=document.querySelectorAll('.btn-p,.btn-o,.nav-cta,.pre-cta');
   const MAG_RADIUS=90, MAG_STRENGTH=14;
+  let magnetRects=Array.from(magnets).map(m=>m.getBoundingClientRect());
+  const refreshMagnetRects=()=>{ magnetRects=Array.from(magnets).map(m=>m.getBoundingClientRect()); };
+  window.addEventListener('scroll', refreshMagnetRects, {passive:true});
+  window.addEventListener('resize', refreshMagnetRects);
   document.addEventListener('pointerease', ()=>{
-    magnets.forEach(m=>{
-      const r=m.getBoundingClientRect();
+    magnets.forEach((m,i)=>{
+      const r=magnetRects[i];
       const cx=r.left+r.width/2, cy=r.top+r.height/2;
       const dx=pointer.x-cx, dy=pointer.y-cy;
       const dist=Math.hypot(dx,dy);
