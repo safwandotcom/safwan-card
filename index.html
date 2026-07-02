@@ -530,9 +530,20 @@ footer a{color:var(--violet2);text-decoration:none}
   footer{padding:1.5rem}
 }
 ::placeholder{color:var(--dim)}
+body.has-fine-pointer,body.has-fine-pointer a,body.has-fine-pointer button{cursor:none}
+.cursor-dot,.cursor-ring,.cursor-spot{position:fixed;top:0;left:0;pointer-events:none;z-index:9999}
+.cursor-dot{width:6px;height:6px;border-radius:50%;background:var(--violet2);transform:translate(-50%,-50%)}
+.cursor-ring{width:32px;height:32px;border-radius:50%;border:1px solid rgba(159,103,255,.5);transform:translate(-50%,-50%);transition:width .25s var(--ease),height .25s var(--ease),border-color .25s var(--ease)}
+.cursor-ring.hover{width:56px;height:56px;border-color:rgba(6,182,212,.7)}
+.cursor-spot{width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(159,103,255,.10),transparent 70%);transform:translate(-50%,-50%)}
+@media(pointer:coarse){.cursor-dot,.cursor-ring,.cursor-spot{display:none}}
 </style>
 </head>
 <body>
+
+<div class="cursor-spot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
 
 <!-- NAV -->
 <nav>
@@ -910,6 +921,18 @@ if(MOTION_ON){
     document.dispatchEvent(new CustomEvent('pointerease',{detail:{x:eased.x,y:eased.y}}));
     requestAnimationFrame(pointerLoop);
   })();
+}
+
+if(MOTION_ON){
+  const cDot=document.querySelector('.cursor-dot');
+  const cRing=document.querySelector('.cursor-ring');
+  const cSpot=document.querySelector('.cursor-spot');
+  document.addEventListener('pointerease', e=>{
+    const {x,y}=e.detail;
+    cDot.style.transform =`translate3d(${pointer.x}px,${pointer.y}px,0) translate(-50%,-50%)`;
+    cRing.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+    cSpot.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+  });
 }
 
 const obs=new IntersectionObserver(entries=>{
