@@ -538,9 +538,20 @@ body.has-fine-pointer,body.has-fine-pointer a,body.has-fine-pointer button{curso
 .cursor-spot{width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(159,103,255,.10),transparent 70%);transform:translate(-50%,-50%)}
 @media(pointer:coarse){.cursor-dot,.cursor-ring,.cursor-spot{display:none}}
 @media(prefers-reduced-motion:reduce){.cursor-dot,.cursor-ring,.cursor-spot{display:none}}
+.orb-wrap{position:fixed;top:0;left:0;width:0;height:0;z-index:0;pointer-events:none;transition:transform .4s var(--ease)}
+.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;will-change:transform}
+.orb-a{width:420px;height:420px;top:-120px;left:-100px;background:var(--orb-a);animation:orbdrift 22s ease-in-out infinite}
+.orb-b{width:360px;height:360px;top:40vh;left:calc(100vw - 220px);background:var(--orb-b);animation:orbdrift 28s ease-in-out infinite reverse}
+.orb-c{width:300px;height:300px;top:calc(100vh - 200px);left:30vw;background:var(--orb-c);animation:orbdrift 25s ease-in-out infinite}
+@keyframes orbdrift{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
+nav,.hero,.ticker-wrap,section,footer{position:relative;z-index:1}
 </style>
 </head>
 <body>
+
+<div class="orb-wrap orb-wrap-a" aria-hidden="true"><div class="orb orb-a"></div></div>
+<div class="orb-wrap orb-wrap-b" aria-hidden="true"><div class="orb orb-b"></div></div>
+<div class="orb-wrap orb-wrap-c" aria-hidden="true"><div class="orb orb-c"></div></div>
 
 <div class="cursor-spot" aria-hidden="true"></div>
 <div class="cursor-ring" aria-hidden="true"></div>
@@ -970,6 +981,15 @@ if(MOTION_ON){
       const py=(e.clientY-r.top)/r.height-.5;
       el.style.transform=`perspective(600px) rotateX(${py*-6}deg) rotateY(${px*6}deg)`;
     });
+  });
+}
+
+if(MOTION_ON){
+  const orbWraps=document.querySelectorAll('.orb-wrap');
+  document.addEventListener('pointerease', e=>{
+    const {x,y}=e.detail;
+    const nx=(x/innerWidth-.5), ny=(y/innerHeight-.5);
+    orbWraps.forEach((w,i)=>{ w.style.transform=`translate(${nx*(i+1)*14}px, ${ny*(i+1)*14}px)`; });
   });
 }
 
