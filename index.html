@@ -894,6 +894,24 @@ footer a{color:var(--violet2);text-decoration:none}
 </footer>
 
 <script>
+const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE_POINTER  = window.matchMedia('(pointer: fine)').matches;
+const MOTION_ON = FINE_POINTER && !REDUCE_MOTION;
+
+const pointer = {x:innerWidth/2, y:innerHeight/2};
+const eased   = {x:innerWidth/2, y:innerHeight/2};
+
+if(MOTION_ON){
+  document.body.classList.add('has-fine-pointer');
+  window.addEventListener('pointermove', e=>{ pointer.x=e.clientX; pointer.y=e.clientY; }, {passive:true});
+  (function pointerLoop(){
+    eased.x += (pointer.x-eased.x)*.15;
+    eased.y += (pointer.y-eased.y)*.15;
+    document.dispatchEvent(new CustomEvent('pointerease',{detail:{x:eased.x,y:eased.y}}));
+    requestAnimationFrame(pointerLoop);
+  })();
+}
+
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
 },{threshold:.06,rootMargin:'0px 0px -50px 0px'});
