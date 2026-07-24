@@ -1,0 +1,120 @@
+/* ============================================================
+   Blog — shared styles. Reuses the portfolio design tokens so
+   the blog and the main site read as one system.
+   ============================================================ */
+
+/* ---------- RESET ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+
+/* ---------- TOKENS (mirrors index.html :root) ---------- */
+:root{
+  --bg:#ffffff;
+  --ink:#16161f;
+  --ink-2:#454553;
+  --muted:#6c6c7b;
+  --line:#ececf1;
+  --line-2:#dcdce4;
+  --accent:#2e0bfc;
+  --accent-ink:#2408c4;
+  --accent-soft:#eeeafe;
+  --coral:#ff6a3d;
+
+  --pad:clamp(1.15rem,4.5vw,4.5rem);
+  --gap-sec:clamp(3.5rem,7vw,6.5rem);
+  --maxw:1180px;
+  --measure:68ch;
+
+  --display:'Bricolage Grotesque','Geist',system-ui,sans-serif;
+  --body:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+
+  --z-nav:100;
+  --e:cubic-bezier(.16,.84,.44,1);
+}
+
+/* ---------- BASE ---------- */
+body{
+  font-family:var(--body);
+  background:var(--bg);color:var(--ink);
+  font-size:clamp(.95rem,.92rem + .12vw,1.02rem);
+  line-height:1.65;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:#fff}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+.reading{max-width:var(--measure);margin-inline:auto;padding-inline:var(--pad)}
+
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:1.08}
+
+/* ---------- MASTHEAD (matches main site) ---------- */
+.masthead{position:sticky;top:0;z-index:var(--z-nav);background:rgba(255,255,255,.85);backdrop-filter:saturate(1.3) blur(12px);border-bottom:1px solid var(--line)}
+.masthead-in{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad);height:58px;display:flex;align-items:center;gap:1.25rem}
+.brand{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:1.02rem}
+.brand b{color:var(--accent)}
+.nav{margin-left:auto;display:flex;align-items:center;gap:1.6rem}
+.nav a{font-size:.85rem;font-weight:500;color:var(--ink-2);transition:color .16s}
+.nav a:hover{color:var(--ink)}
+.nav a.here{color:var(--ink)}
+
+/* ---------- LISTING PAGE ---------- */
+.blog-hero{padding-block:clamp(2.75rem,6vw,4.75rem) clamp(1.5rem,3vw,2.25rem)}
+.blog-hero .eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.9rem}
+.blog-hero h1{font-size:clamp(2rem,1.3rem + 3vw,3.1rem)}
+.blog-hero p{color:var(--ink-2);max-width:52ch;margin-top:1rem;font-size:1.05rem}
+
+.post-list{border-top:1px solid var(--line);margin-top:clamp(1.5rem,4vw,2.5rem)}
+.post-row{display:block;padding-block:clamp(1.4rem,3vw,2rem);border-bottom:1px solid var(--line);transition:background .18s var(--e)}
+.post-row:hover{background:var(--accent-soft)}
+.post-row:hover .post-title{color:var(--accent-ink)}
+.post-meta{display:flex;align-items:center;gap:.7rem;font-size:.8rem;color:var(--muted);margin-bottom:.55rem}
+.post-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--line-2)}
+.post-title{font-family:var(--display);font-weight:800;font-size:clamp(1.25rem,1rem + 1.2vw,1.7rem);letter-spacing:-.02em;line-height:1.15;transition:color .16s}
+.post-excerpt{color:var(--ink-2);margin-top:.5rem;max-width:60ch}
+.post-row .more{display:inline-flex;align-items:center;gap:.4ch;margin-top:.7rem;font-size:.85rem;font-weight:600;color:var(--accent)}
+
+/* ---------- ARTICLE (single post) ---------- */
+.article-head{padding-block:clamp(2.5rem,6vw,4.5rem) clamp(1.25rem,3vw,2rem)}
+.article-head .eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.article-head h1{font-size:clamp(1.9rem,1.2rem + 3vw,3rem);text-wrap:balance}
+.article-head .meta{display:flex;align-items:center;gap:.7rem;font-size:.85rem;color:var(--muted);margin-top:1.15rem}
+.article-head .meta .dot{width:3px;height:3px;border-radius:50%;background:var(--line-2)}
+
+.prose{padding-bottom:clamp(3rem,7vw,5rem)}
+.prose > * + *{margin-top:1.15em}
+.prose p{color:var(--ink-2)}
+.prose h2{font-size:clamp(1.35rem,1.1rem + 1vw,1.7rem);margin-top:2.2em;color:var(--ink)}
+.prose h3{font-size:clamp(1.1rem,1rem + .5vw,1.3rem);margin-top:1.8em;color:var(--ink)}
+.prose a{color:var(--accent-ink);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px;transition:text-decoration-color .16s}
+.prose a:hover{text-decoration-color:var(--accent)}
+.prose strong{color:var(--ink);font-weight:600}
+.prose ul,.prose ol{padding-left:1.3em;color:var(--ink-2)}
+.prose ul li{list-style:disc}
+.prose ol li{list-style:decimal}
+.prose li + li{margin-top:.4em}
+.prose blockquote{border-left:3px solid var(--accent);padding-left:1.15rem;color:var(--ink);font-style:italic;font-size:1.08em}
+.prose img{border-radius:12px;border:1px solid var(--line);margin-block:1.6em}
+.prose figure figcaption{font-size:.82rem;color:var(--muted);text-align:center;margin-top:.6rem}
+.prose code{font-family:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--accent-soft);color:var(--accent-ink);padding:.12em .4em;border-radius:5px}
+.prose pre{background:#0f0f17;color:#e8e8f0;padding:1.15rem 1.3rem;border-radius:12px;overflow-x:auto;font-size:.86rem;line-height:1.6}
+.prose pre code{background:none;color:inherit;padding:0}
+.prose hr{border:none;border-top:1px solid var(--line);margin-block:2.5em}
+
+.article-foot{border-top:1px solid var(--line);padding-block:2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+
+/* ---------- BACK LINK ---------- */
+.back{display:inline-flex;align-items:center;gap:.45ch;font-size:.85rem;font-weight:600;color:var(--ink-2);transition:color .16s,gap .16s var(--e)}
+.back:hover{color:var(--accent);gap:.75ch}
+
+/* ---------- FOOTER ---------- */
+.blog-footer{border-top:1px solid var(--line);padding-block:2.5rem}
+.blog-footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.82rem}
+.blog-footer a{color:var(--ink-2)}
+.blog-footer a:hover{color:var(--accent)}
+
+@media(max-width:520px){
+  .nav{gap:1.1rem}
+  .article-foot{flex-direction:column;align-items:flex-start}
+}
