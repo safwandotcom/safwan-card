@@ -13,8 +13,9 @@ const {
   addSitemapEntry,
 } = require('./generate-post');
 
-function todayIso() {
-  return new Date().toISOString().slice(0, 10);
+function todayIso(now = new Date()) {
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
 function main(payloadPath, { repoRoot = process.cwd() } = {}) {
@@ -56,25 +57,21 @@ function main(payloadPath, { repoRoot = process.cwd() } = {}) {
     linkedinUrl,
   };
 
-  fs.writeFileSync(path.join(postsDir, `${slug}.html`), buildPostHtml(fields), 'utf8');
-
+  // Build every output in memory first so a failure leaves the repo untouched.
   const blogIndexPath = path.join(repoRoot, 'blog', 'index.html');
-  const updatedBlogIndex = prependListingRow(
-    fs.readFileSync(blogIndexPath, 'utf8'),
-    buildListingRowHtml(fields)
-  );
-  fs.writeFileSync(blogIndexPath, updatedBlogIndex, 'utf8');
-
   const homepagePath = path.join(repoRoot, 'index.html');
-  const updatedHomepage = replaceHomepageWritingBlock(
-    fs.readFileSync(homepagePath, 'utf8'),
-    buildHomepagePreviewHtml(fields)
-  );
-  fs.writeFileSync(homepagePath, updatedHomepage, 'utf8');
-
   const sitemapPath = path.join(repoRoot, 'sitemap.xml');
-  const updatedSitemap = addSitemapEntry(fs.readFileSync(sitemapPath, 'utf8'), { slug, isoDate: date });
-  fs.writeFileSync(sitemapPath, updatedSitemap, 'utf8');
+
+  const outputs = [
+    [path.join(postsDir, `${slug}.html`), buildPostHtml(fields)],
+    [blogIndexPath, prependListingRow(fs.readFileSync(blogIndexPath, 'utf8'), buildListingRowHtml(fields))],
+    [homepagePath, replaceHomepageWritingBlock(fs.readFileSync(homepagePath, 'utf8'), buildHomepagePreviewHtml(fields))],
+    [sitemapPath, addSitemapEntry(fs.readFileSync(sitemapPath, 'utf8'), { slug, isoDate: date })],
+  ];
+
+  for (const [filePath, content] of outputs) {
+    fs.writeFileSync(filePath, content, 'utf8');
+  }
 
   console.log(`Created blog/posts/${slug}.html`);
   console.log('Updated blog/index.html, index.html (#writing), sitemap.xml');
@@ -91,4 +88,4 @@ if (require.main === module) {
   main(payloadPath);
 }
 
-module.exports = { main };
+module.exports = { main, todayIso };

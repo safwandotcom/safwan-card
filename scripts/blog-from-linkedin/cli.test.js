@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
-const { main } = require('./cli');
+const { main, todayIso } = require('./cli');
 
 function makeFixtureRepo() {
   const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'blog-from-linkedin-'));
@@ -104,4 +104,26 @@ test('main() throws a clear error when the payload is missing required fields', 
   assert.throws(() => main(payloadPath, { repoRoot }), /must include title, metaDescription, and bodyHtml/);
 
   fs.rmSync(repoRoot, { recursive: true, force: true });
+});
+
+test('main() writes nothing when a later step fails', () => {
+  const repoRoot = makeFixtureRepo();
+  fs.writeFileSync(path.join(repoRoot, 'index.html'), '<html>no writing section</html>');
+  const blogIndexBefore = fs.readFileSync(path.join(repoRoot, 'blog', 'index.html'), 'utf8');
+  const payloadPath = path.join(repoRoot, 'payload.json');
+  fs.writeFileSync(
+    payloadPath,
+    JSON.stringify({ title: 'Doomed Post', metaDescription: 'x', bodyHtml: '<p>x</p>', date: '2026-09-24' })
+  );
+
+  assert.throws(() => main(payloadPath, { repoRoot }), /#writing section not found/);
+  assert.ok(!fs.existsSync(path.join(repoRoot, 'blog', 'posts', 'doomed-post.html')));
+  assert.equal(fs.readFileSync(path.join(repoRoot, 'blog', 'index.html'), 'utf8'), blogIndexBefore);
+
+  fs.rmSync(repoRoot, { recursive: true, force: true });
+});
+
+test('todayIso uses the local calendar date, not UTC', () => {
+  assert.equal(todayIso(new Date(2026, 8, 24, 23, 59)), '2026-09-24');
+  assert.equal(todayIso(new Date(2026, 0, 5, 0, 1)), '2026-01-05');
 });

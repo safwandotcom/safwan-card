@@ -237,6 +237,7 @@ test('replaceHomepageWritingBlock swaps the single preview anchor inside #writin
   assert.match(updated, /blog\/posts\/new-post\.html/);
   assert.doesNotMatch(updated, /blog\/posts\/old-post\.html/);
   assert.match(updated, /unrelated/, 'content outside #writing must be untouched');
+  assert.match(updated, /\n {6}<a href="blog\/posts\/new-post\.html"/, 'keeps the original indentation, not doubled');
 });
 
 test('replaceHomepageWritingBlock throws when #writing section is missing', () => {

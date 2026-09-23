@@ -207,7 +207,7 @@ function replaceHomepageWritingBlock(homepageHtml, previewHtml) {
     throw new Error('no existing post preview anchor found in #writing section');
   }
 
-  return before + section.replace(anchorPattern, previewHtml) + after;
+  return before + section.replace(anchorPattern, previewHtml.trimStart()) + after;
 }
 
 function addSitemapEntry(sitemapXml, { slug, isoDate }) {
