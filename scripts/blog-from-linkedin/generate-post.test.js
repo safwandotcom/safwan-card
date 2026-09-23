@@ -6,6 +6,8 @@ const {
   estimateReadingTime,
   formatDateLong,
   buildPostHtml,
+  buildListingRowHtml,
+  prependListingRow,
 } = require('./generate-post');
 
 test('slugify lowercases, hyphenates, and strips punctuation', () => {
@@ -104,4 +106,64 @@ test('buildPostHtml escapes special characters in title, description, eyebrow, a
   // Check that raw unescaped versions do NOT appear in dangerous contexts
   assert.doesNotMatch(html, /<title>A "Test" & Post/);
   assert.doesNotMatch(html, /content="[^"]*<tag>[^"]*"/);
+});
+
+test('buildListingRowHtml renders a post-row anchor with title, date, and excerpt', () => {
+  const row = buildListingRowHtml({
+    title: 'Test Post Title',
+    slug: 'test-post-title',
+    isoDate: '2026-09-24',
+    longDate: 'Sep 24, 2026',
+    excerpt: 'A short teaser sentence.',
+    readingTime: 2,
+  });
+  assert.match(row, /<a class="post-row" href="posts\/test-post-title\.html">/);
+  assert.match(row, /<time datetime="2026-09-24">Sep 24, 2026<\/time>/);
+  assert.match(row, /<h2 class="post-title">Test Post Title<\/h2>/);
+  assert.match(row, /<p class="post-excerpt">A short teaser sentence\.<\/p>/);
+  assert.match(row, /<span>2 min read<\/span>/);
+});
+
+test('buildListingRowHtml escapes special characters in title and excerpt', () => {
+  const row = buildListingRowHtml({
+    title: 'A "Test" & Post',
+    slug: 'test-post',
+    isoDate: '2026-09-24',
+    longDate: 'Sep 24, 2026',
+    excerpt: 'Text with <tag> & "quotes".',
+    readingTime: 2,
+  });
+
+  // Check that escaped forms appear in the HTML
+  assert.match(row, /<h2 class="post-title">A &quot;Test&quot; &amp; Post<\/h2>/);
+  assert.match(row, /<p class="post-excerpt">Text with &lt;tag&gt; &amp; &quot;quotes&quot;\.<\/p>/);
+
+  // Check that raw unescaped versions do NOT appear
+  assert.doesNotMatch(row, /<h2 class="post-title">A "Test" & Post<\/h2>/);
+  assert.doesNotMatch(row, /excerpt">Text with <tag>/);
+});
+
+test('prependListingRow inserts the new row right after the marker comment, before existing rows', () => {
+  const fixture = `<div class="post-list">
+
+      <!-- POST ROW TEMPLATE — newest first -->
+      <a class="post-row" href="posts/old-post.html">
+        <h2 class="post-title">Old Post</h2>
+      </a>
+
+    </div>`;
+  const newRow = `      <a class="post-row" href="posts/new-post.html">
+        <h2 class="post-title">New Post</h2>
+      </a>`;
+
+  const updated = prependListingRow(fixture, newRow);
+  const newIndex = updated.indexOf('posts/new-post.html');
+  const oldIndex = updated.indexOf('posts/old-post.html');
+
+  assert.ok(newIndex > -1 && oldIndex > -1);
+  assert.ok(newIndex < oldIndex, 'new row should appear before the old row');
+});
+
+test('prependListingRow throws when the marker comment is missing', () => {
+  assert.throws(() => prependListingRow('<div class="post-list"></div>', 'x'));
 });

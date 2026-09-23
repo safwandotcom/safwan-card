@@ -145,6 +145,31 @@ ${jsonLdString}
 `;
 }
 
+const ROW_MARKER = '<!-- POST ROW TEMPLATE — newest first -->';
+
+function buildListingRowHtml({ title, slug, isoDate, longDate, excerpt, readingTime }) {
+  return `      <a class="post-row" href="posts/${slug}.html">
+        <div class="post-meta">
+          <time datetime="${isoDate}">${longDate}</time>
+          <span class="dot"></span>
+          <span>${readingTime} min read</span>
+        </div>
+        <h2 class="post-title">${escapeHtml(title)}</h2>
+        <p class="post-excerpt">${escapeHtml(excerpt)}</p>
+        <span class="more">Read →</span>
+      </a>`;
+}
+
+function prependListingRow(blogIndexHtml, rowHtml) {
+  const marker = `${ROW_MARKER}\n`;
+  const idx = blogIndexHtml.indexOf(marker);
+  if (idx === -1) {
+    throw new Error('post-row marker comment not found in blog/index.html');
+  }
+  const insertAt = idx + marker.length;
+  return `${blogIndexHtml.slice(0, insertAt)}${rowHtml}\n\n${blogIndexHtml.slice(insertAt)}`;
+}
+
 module.exports = {
   slugify,
   uniqueSlug,
@@ -152,4 +177,6 @@ module.exports = {
   formatDateLong,
   escapeHtml,
   buildPostHtml,
+  buildListingRowHtml,
+  prependListingRow,
 };
