@@ -5,6 +5,7 @@ const {
   uniqueSlug,
   estimateReadingTime,
   formatDateLong,
+  buildPostHtml,
 } = require('./generate-post');
 
 test('slugify lowercases, hyphenates, and strips punctuation', () => {
@@ -45,4 +46,43 @@ test('estimateReadingTime never returns less than 1', () => {
 test('formatDateLong renders "Mon D, YYYY"', () => {
   assert.equal(formatDateLong('2026-09-24'), 'Sep 24, 2026');
   assert.equal(formatDateLong('2026-01-05'), 'Jan 5, 2026');
+});
+
+function samplePostFields(overrides = {}) {
+  return {
+    title: 'Test Post Title',
+    slug: 'test-post-title',
+    isoDate: '2026-09-24',
+    longDate: 'Sep 24, 2026',
+    metaDescription: 'A short meta description for the test post.',
+    eyebrow: 'Essay',
+    bodyHtml: '<p>Body paragraph one.</p><p>Body paragraph two.</p>',
+    readingTime: 2,
+    linkedinUrl: null,
+    ...overrides,
+  };
+}
+
+test('buildPostHtml includes title, canonical URL, and meta description', () => {
+  const html = buildPostHtml(samplePostFields());
+  assert.match(html, /<title>Test Post Title — Safwanul<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/safwandotcom\.xyz\/blog\/posts\/test-post-title\.html">/);
+  assert.match(html, /<meta name="description" content="A short meta description for the test post\.">/);
+  assert.match(html, /"headline": "Test Post Title"/);
+  assert.match(html, /"datePublished": "2026-09-24"/);
+});
+
+test('buildPostHtml embeds the reshaped body HTML and reading time', () => {
+  const html = buildPostHtml(samplePostFields());
+  assert.match(html, /<p>Body paragraph one\.<\/p><p>Body paragraph two\.<\/p>/);
+  assert.match(html, /<span>2 min read<\/span>/);
+  assert.match(html, /<time datetime="2026-09-24">Sep 24, 2026<\/time>/);
+});
+
+test('buildPostHtml adds a plain LinkedIn footer link when linkedinUrl is set, and omits it otherwise', () => {
+  const withLink = buildPostHtml(samplePostFields({ linkedinUrl: 'https://www.linkedin.com/posts/example' }));
+  assert.match(withLink, /<a href="https:\/\/www\.linkedin\.com\/posts\/example">Originally posted on LinkedIn →<\/a>/);
+
+  const withoutLink = buildPostHtml(samplePostFields());
+  assert.doesNotMatch(withoutLink, /Originally posted on LinkedIn/);
 });
