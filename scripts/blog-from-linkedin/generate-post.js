@@ -29,18 +29,46 @@ function formatDateLong(isoDate) {
   return `${MONTHS[m - 1]} ${d}, ${y}`;
 }
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebrow, bodyHtml, readingTime, linkedinUrl }) {
-  const linkedinFooter = linkedinUrl
-    ? `\n      <p><a href="${linkedinUrl}">Originally posted on LinkedIn →</a></p>`
+  const escapedTitle = escapeHtml(title);
+  const escapedMetaDescription = escapeHtml(metaDescription);
+  const escapedEyebrow = escapeHtml(eyebrow);
+  const escapedLinkedinUrl = linkedinUrl ? escapeHtml(linkedinUrl) : null;
+
+  const linkedinFooter = escapedLinkedinUrl
+    ? `\n      <p><a href="${escapedLinkedinUrl}">Originally posted on LinkedIn →</a></p>`
     : '';
+
+  const jsonLdObject = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": metaDescription,
+    "image": "https://safwandotcom.xyz/og.png",
+    "datePublished": isoDate,
+    "dateModified": isoDate,
+    "author": { "@type": "Person", "name": "Mohammed Safwanul Islam", "url": "https://safwandotcom.xyz/" },
+    "publisher": { "@type": "Person", "name": "Mohammed Safwanul Islam" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://safwandotcom.xyz/blog/posts/${slug}.html` }
+  };
+  const jsonLdString = JSON.stringify(jsonLdObject, null, 2).replace(/<\//g, '<\\/');
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${title} — Safwanul</title>
-<meta name="description" content="${metaDescription}">
+<title>${escapedTitle} — Safwanul</title>
+<meta name="description" content="${escapedMetaDescription}">
 <meta name="author" content="Mohammed Safwanul Islam">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://safwandotcom.xyz/blog/posts/${slug}.html">
@@ -51,8 +79,8 @@ function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebro
 <link rel="manifest" href="/site.webmanifest">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Mohammed Safwanul Islam">
-<meta property="og:title" content="${title}">
-<meta property="og:description" content="${metaDescription}">
+<meta property="og:title" content="${escapedTitle}">
+<meta property="og:description" content="${escapedMetaDescription}">
 <meta property="og:url" content="https://safwandotcom.xyz/blog/posts/${slug}.html">
 <meta property="og:image" content="https://safwandotcom.xyz/og.png">
 <meta property="article:published_time" content="${isoDate}">
@@ -60,18 +88,7 @@ function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebro
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://safwandotcom.xyz/og.png">
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "${title}",
-  "description": "${metaDescription}",
-  "image": "https://safwandotcom.xyz/og.png",
-  "datePublished": "${isoDate}",
-  "dateModified": "${isoDate}",
-  "author": { "@type": "Person", "name": "Mohammed Safwanul Islam", "url": "https://safwandotcom.xyz/" },
-  "publisher": { "@type": "Person", "name": "Mohammed Safwanul Islam" },
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://safwandotcom.xyz/blog/posts/${slug}.html" }
-}
+${jsonLdString}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,8 +113,8 @@ function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebro
   <article>
     <header class="article-head reading">
       <a class="back" href="../index.html">← All writing</a>
-      <p class="eyebrow" style="margin-top:1.5rem">${eyebrow}</p>
-      <h1>${title}</h1>
+      <p class="eyebrow" style="margin-top:1.5rem">${escapedEyebrow}</p>
+      <h1>${escapedTitle}</h1>
       <div class="meta">
         <time datetime="${isoDate}">${longDate}</time>
         <span class="dot"></span>
@@ -133,5 +150,6 @@ module.exports = {
   uniqueSlug,
   estimateReadingTime,
   formatDateLong,
+  escapeHtml,
   buildPostHtml,
 };

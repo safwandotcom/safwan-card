@@ -86,3 +86,22 @@ test('buildPostHtml adds a plain LinkedIn footer link when linkedinUrl is set, a
   const withoutLink = buildPostHtml(samplePostFields());
   assert.doesNotMatch(withoutLink, /Originally posted on LinkedIn/);
 });
+
+test('buildPostHtml escapes special characters in title, description, eyebrow, and linkedinUrl', () => {
+  const html = buildPostHtml(samplePostFields({
+    title: 'A "Test" & Post',
+    metaDescription: 'Description with <tag> & "quotes"',
+    eyebrow: 'Essay & Guide',
+    linkedinUrl: 'https://example.com/posts?id=123&type="article"'
+  }));
+
+  // Check that escaped forms appear in attributes and content
+  assert.match(html, /A &quot;Test&quot; &amp; Post/);
+  assert.match(html, /Description with &lt;tag&gt; &amp; &quot;quotes&quot;/);
+  assert.match(html, /Essay &amp; Guide/);
+  assert.match(html, /id=123&amp;type=&quot;article&quot;/);
+
+  // Check that raw unescaped versions do NOT appear in dangerous contexts
+  assert.doesNotMatch(html, /<title>A "Test" & Post/);
+  assert.doesNotMatch(html, /content="[^"]*<tag>[^"]*"/);
+});
