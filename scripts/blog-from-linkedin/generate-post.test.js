@@ -12,6 +12,10 @@ test('slugify lowercases, hyphenates, and strips punctuation', () => {
   assert.equal(slugify('Shipping v2.0 — the messy middle!'), 'shipping-v2-0-the-messy-middle');
 });
 
+test('slugify strips accented characters', () => {
+  assert.equal(slugify('Café Today'), 'cafe-today');
+});
+
 test('uniqueSlug returns the base slug when there is no collision', () => {
   assert.equal(uniqueSlug('why-i-build-in-public', ['some-other-post']), 'why-i-build-in-public');
 });
