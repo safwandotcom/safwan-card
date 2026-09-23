@@ -230,3 +230,55 @@ test('replaceHomepageWritingBlock swaps the single preview anchor inside #writin
 test('replaceHomepageWritingBlock throws when #writing section is missing', () => {
   assert.throws(() => replaceHomepageWritingBlock('<html></html>', 'x'));
 });
+
+const { addSitemapEntry } = require('./generate-post');
+
+function sitemapFixture() {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://safwandotcom.xyz/</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/why-i-build-in-public.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>
+`;
+}
+
+test('addSitemapEntry adds a new <url> for the post and bumps homepage/blog lastmod', () => {
+  const updated = addSitemapEntry(sitemapFixture(), { slug: 'test-post-title', isoDate: '2026-09-24' });
+
+  assert.match(updated, /<loc>https:\/\/safwandotcom\.xyz\/blog\/posts\/test-post-title\.html<\/loc>/);
+  assert.match(
+    updated,
+    /<loc>https:\/\/safwandotcom\.xyz\/<\/loc>\s*<lastmod>2026-09-24<\/lastmod>/
+  );
+  assert.match(
+    updated,
+    /<loc>https:\/\/safwandotcom\.xyz\/blog\/<\/loc>\s*<lastmod>2026-09-24<\/lastmod>/
+  );
+  assert.match(
+    updated,
+    /<loc>https:\/\/safwandotcom\.xyz\/blog\/posts\/why-i-build-in-public\.html<\/loc>\s*<lastmod>2026-07-25<\/lastmod>/,
+    'older post entries must be untouched'
+  );
+});
+
+test('addSitemapEntry throws if an entry for the slug already exists', () => {
+  assert.throws(() =>
+    addSitemapEntry(sitemapFixture(), { slug: 'why-i-build-in-public', isoDate: '2026-09-24' })
+  );
+});

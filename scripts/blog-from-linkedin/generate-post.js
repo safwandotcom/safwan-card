@@ -206,6 +206,33 @@ function replaceHomepageWritingBlock(homepageHtml, previewHtml) {
   return before + section.replace(anchorPattern, previewHtml) + after;
 }
 
+function addSitemapEntry(sitemapXml, { slug, isoDate }) {
+  if (sitemapXml.includes(`blog/posts/${slug}.html`)) {
+    throw new Error(`sitemap already contains an entry for ${slug}`);
+  }
+
+  const entry = `  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/${slug}.html</loc>
+    <lastmod>${isoDate}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+`;
+
+  let updated = sitemapXml.replace('</urlset>', `${entry}</urlset>`);
+
+  updated = updated.replace(
+    /(<loc>https:\/\/safwandotcom\.xyz\/<\/loc>\s*<lastmod>)[^<]+(<\/lastmod>)/,
+    `$1${isoDate}$2`
+  );
+  updated = updated.replace(
+    /(<loc>https:\/\/safwandotcom\.xyz\/blog\/<\/loc>\s*<lastmod>)[^<]+(<\/lastmod>)/,
+    `$1${isoDate}$2`
+  );
+
+  return updated;
+}
+
 module.exports = {
   slugify,
   uniqueSlug,
@@ -217,4 +244,5 @@ module.exports = {
   prependListingRow,
   buildHomepagePreviewHtml,
   replaceHomepageWritingBlock,
+  addSitemapEntry,
 };
