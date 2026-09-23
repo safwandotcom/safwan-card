@@ -170,6 +170,18 @@ test('prependListingRow throws when the marker comment is missing', () => {
   assert.throws(() => prependListingRow('<div class="post-list"></div>', 'x'));
 });
 
+test('prependListingRow handles CRLF line endings correctly', () => {
+  const fixture = `<div class="post-list">\r\n\r\n      <!-- POST ROW TEMPLATE — newest first -->\r\n      <a class="post-row" href="posts/old-post.html">\r\n        <h2 class="post-title">Old Post</h2>\r\n      </a>\r\n\r\n    </div>`;
+  const newRow = `      <a class="post-row" href="posts/new-post.html">\r\n        <h2 class="post-title">New Post</h2>\r\n      </a>`;
+
+  const updated = prependListingRow(fixture, newRow);
+  const newIndex = updated.indexOf('posts/new-post.html');
+  const oldIndex = updated.indexOf('posts/old-post.html');
+
+  assert.ok(newIndex > -1 && oldIndex > -1);
+  assert.ok(newIndex < oldIndex, 'new row should appear before the old row with CRLF line endings');
+});
+
 test('buildHomepagePreviewHtml renders the styled homepage anchor block', () => {
   const block = buildHomepagePreviewHtml({
     title: 'Test Post Title',

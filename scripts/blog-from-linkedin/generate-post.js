@@ -161,12 +161,16 @@ function buildListingRowHtml({ title, slug, isoDate, longDate, excerpt, readingT
 }
 
 function prependListingRow(blogIndexHtml, rowHtml) {
-  const marker = `${ROW_MARKER}\n`;
-  const idx = blogIndexHtml.indexOf(marker);
+  const idx = blogIndexHtml.indexOf(ROW_MARKER);
   if (idx === -1) {
     throw new Error('post-row marker comment not found in blog/index.html');
   }
-  const insertAt = idx + marker.length;
+  let insertAt = idx + ROW_MARKER.length;
+  if (blogIndexHtml.slice(insertAt, insertAt + 2) === '\r\n') {
+    insertAt += 2;
+  } else if (blogIndexHtml[insertAt] === '\n') {
+    insertAt += 1;
+  }
   return `${blogIndexHtml.slice(0, insertAt)}${rowHtml}\n\n${blogIndexHtml.slice(insertAt)}`;
 }
 
