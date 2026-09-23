@@ -8,6 +8,8 @@ const {
   buildPostHtml,
   buildListingRowHtml,
   prependListingRow,
+  buildHomepagePreviewHtml,
+  replaceHomepageWritingBlock,
 } = require('./generate-post');
 
 test('slugify lowercases, hyphenates, and strips punctuation', () => {
@@ -166,4 +168,65 @@ test('prependListingRow inserts the new row right after the marker comment, befo
 
 test('prependListingRow throws when the marker comment is missing', () => {
   assert.throws(() => prependListingRow('<div class="post-list"></div>', 'x'));
+});
+
+test('buildHomepagePreviewHtml renders the styled homepage anchor block', () => {
+  const block = buildHomepagePreviewHtml({
+    title: 'Test Post Title',
+    slug: 'test-post-title',
+    isoDate: '2026-09-24',
+    longDate: 'Sep 24, 2026',
+    excerpt: 'A short teaser sentence.',
+    readingTime: 2,
+  });
+  assert.match(block, /<a href="blog\/posts\/test-post-title\.html" style="display:block/);
+  assert.match(block, /<h3 style="font-size:clamp\(1\.2rem,1rem \+ 1vw,1\.55rem\)">Test Post Title<\/h3>/);
+  assert.match(block, /<p style="color:var\(--ink-2\);margin-top:\.4rem;max-width:60ch">A short teaser sentence\.<\/p>/);
+});
+
+test('buildHomepagePreviewHtml escapes special characters in title and excerpt', () => {
+  const block = buildHomepagePreviewHtml({
+    title: 'A "Test" & Post',
+    slug: 'test-post',
+    isoDate: '2026-09-24',
+    longDate: 'Sep 24, 2026',
+    excerpt: 'Text with <tag> & "quotes".',
+    readingTime: 2,
+  });
+
+  // Check that escaped forms appear in the HTML
+  assert.match(block, /<h3 style="font-size:clamp\(1\.2rem,1rem \+ 1vw,1\.55rem\)">A &quot;Test&quot; &amp; Post<\/h3>/);
+  assert.match(block, /<p style="color:var\(--ink-2\);margin-top:\.4rem;max-width:60ch">Text with &lt;tag&gt; &amp; &quot;quotes&quot;\.<\/p>/);
+
+  // Check that raw unescaped versions do NOT appear in dangerous contexts
+  assert.doesNotMatch(block, /<h3[^>]*>A "Test" & Post<\/h3>/);
+  assert.doesNotMatch(block, /<p[^>]*>Text with <tag>/);
+});
+
+test('replaceHomepageWritingBlock swaps the single preview anchor inside #writing', () => {
+  const fixture = `<section class="sec" id="writing">
+  <div class="wrap">
+    <div class="reveal" style="border-top:1px solid var(--line)">
+      <a href="blog/posts/old-post.html" style="display:block">
+        <h3>Old Post</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="contact">unrelated</section>`;
+
+  const newBlock = `      <a href="blog/posts/new-post.html" style="display:block">
+        <h3>New Post</h3>
+      </a>`;
+
+  const updated = replaceHomepageWritingBlock(fixture, newBlock);
+
+  assert.match(updated, /blog\/posts\/new-post\.html/);
+  assert.doesNotMatch(updated, /blog\/posts\/old-post\.html/);
+  assert.match(updated, /unrelated/, 'content outside #writing must be untouched');
+});
+
+test('replaceHomepageWritingBlock throws when #writing section is missing', () => {
+  assert.throws(() => replaceHomepageWritingBlock('<html></html>', 'x'));
 });

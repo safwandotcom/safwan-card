@@ -170,6 +170,42 @@ function prependListingRow(blogIndexHtml, rowHtml) {
   return `${blogIndexHtml.slice(0, insertAt)}${rowHtml}\n\n${blogIndexHtml.slice(insertAt)}`;
 }
 
+const WRITING_SECTION_START = '<section class="sec" id="writing">';
+
+function buildHomepagePreviewHtml({ title, slug, isoDate, longDate, excerpt, readingTime }) {
+  return `      <a href="blog/posts/${slug}.html" style="display:block;padding-block:clamp(1.4rem,3vw,1.9rem);border-bottom:1px solid var(--line);transition:background .18s var(--e)" onmouseover="this.style.background='var(--accent-soft)'" onmouseout="this.style.background='transparent'">
+        <div style="display:flex;align-items:center;gap:.7rem;font-size:.8rem;color:var(--muted);margin-bottom:.5rem">
+          <time datetime="${isoDate}">${longDate}</time>
+          <span style="width:3px;height:3px;border-radius:50%;background:var(--line-2)"></span>
+          <span>${readingTime} min read</span>
+        </div>
+        <h3 style="font-size:clamp(1.2rem,1rem + 1vw,1.55rem)">${escapeHtml(title)}</h3>
+        <p style="color:var(--ink-2);margin-top:.4rem;max-width:60ch">${escapeHtml(excerpt)}</p>
+      </a>`;
+}
+
+function replaceHomepageWritingBlock(homepageHtml, previewHtml) {
+  const sectionStart = homepageHtml.indexOf(WRITING_SECTION_START);
+  if (sectionStart === -1) {
+    throw new Error('#writing section not found in homepage');
+  }
+  const sectionEnd = homepageHtml.indexOf('</section>', sectionStart);
+  if (sectionEnd === -1) {
+    throw new Error('#writing section is not closed');
+  }
+
+  const before = homepageHtml.slice(0, sectionStart);
+  const section = homepageHtml.slice(sectionStart, sectionEnd);
+  const after = homepageHtml.slice(sectionEnd);
+
+  const anchorPattern = /<a href="blog\/posts\/[\s\S]*?<\/a>/;
+  if (!anchorPattern.test(section)) {
+    throw new Error('no existing post preview anchor found in #writing section');
+  }
+
+  return before + section.replace(anchorPattern, previewHtml) + after;
+}
+
 module.exports = {
   slugify,
   uniqueSlug,
@@ -179,4 +215,6 @@ module.exports = {
   buildPostHtml,
   buildListingRowHtml,
   prependListingRow,
+  buildHomepagePreviewHtml,
+  replaceHomepageWritingBlock,
 };
