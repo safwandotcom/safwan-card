@@ -2,19 +2,91 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://safwandotcom.xyz/</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://safwandotcom.xyz/blog/</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://safwandotcom.xyz/blog/posts/why-i-build-in-public.html</loc>
-    <lastmod>2026-07-25</lastmod>
+    <loc>https://safwandotcom.xyz/blog/posts/internship-beyond-the-classroom.html</loc>
+    <lastmod>2024-10-02</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/the-purpose-of-meetings-beyond-updates-and-games.html</loc>
+    <lastmod>2024-10-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/another-intern-meeting-at-kidocode.html</loc>
+    <lastmod>2024-10-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/scholarship-training-for-ucsi-staff-and-student-ambassadors.html</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/presenting-a-sleep-pattern-analysis-at-kidocode.html</loc>
+    <lastmod>2024-10-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/building-real-time-pose-detection-with-openpose.html</loc>
+    <lastmod>2024-12-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/graduating-from-ucsi-university.html</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/a-fake-bdjobs-email-and-the-trust-gap-in-hiring.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/back-where-the-journey-began.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/meeting-ucsis-leadership-in-bangladesh.html</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/building-a-safe-view-as-user-feature.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/the-filename-on-an-uploaded-file-is-user-input.html</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://safwandotcom.xyz/blog/posts/keep-authorization-rules-out-of-route-handlers.html</loc>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>

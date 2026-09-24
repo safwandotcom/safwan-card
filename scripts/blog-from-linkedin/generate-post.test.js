@@ -17,6 +17,11 @@ test('slugify lowercases, hyphenates, and strips punctuation', () => {
   assert.equal(slugify('Shipping v2.0 — the messy middle!'), 'shipping-v2-0-the-messy-middle');
 });
 
+test('slugify drops apostrophes instead of hyphenating them', () => {
+  assert.equal(slugify("Meeting UCSI's Leadership"), 'meeting-ucsis-leadership');
+  assert.equal(slugify('Don’t Use It'), 'dont-use-it');
+});
+
 test('slugify strips accented characters', () => {
   assert.equal(slugify('Café Today'), 'cafe-today');
 });
