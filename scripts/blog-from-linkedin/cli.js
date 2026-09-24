@@ -18,6 +18,31 @@ function todayIso(now = new Date()) {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
+// Payload media: `images` is a list of paths (or { src, alt }); `video` is a path or { src, poster }.
+// Relative paths resolve against the payload file's folder. Files are copied to blog/media/<slug>/.
+function planMedia({ images, video, slug, title, payloadDir, repoRoot }) {
+  const destDir = path.join(repoRoot, 'blog', 'media', slug);
+  const copies = [];
+  const place = (src, name) => {
+    const from = path.resolve(payloadDir, src);
+    if (!fs.existsSync(from)) throw new Error(`media file not found: ${from}`);
+    const file = `${name}${path.extname(from).toLowerCase()}`;
+    copies.push([from, path.join(destDir, file)]);
+    return file;
+  };
+
+  const media = { images: [], video: null };
+  images.forEach((img, i) => {
+    const { src, alt } = typeof img === 'string' ? { src: img } : img;
+    media.images.push({ file: place(src, String(i + 1)), alt: alt || `Photo ${i + 1} from "${title}"` });
+  });
+  if (video) {
+    const { src, poster } = typeof video === 'string' ? { src: video } : video;
+    media.video = { file: place(src, 'video'), poster: poster ? place(poster, 'video-poster') : null };
+  }
+  return { media, copies };
+}
+
 function main(payloadPath, { repoRoot = process.cwd() } = {}) {
   const payload = JSON.parse(fs.readFileSync(payloadPath, 'utf8'));
   const {
@@ -28,6 +53,8 @@ function main(payloadPath, { repoRoot = process.cwd() } = {}) {
     bodyHtml,
     linkedinUrl = null,
     date = todayIso(),
+    images = [],
+    video = null,
   } = payload;
 
   if (!title || !metaDescription || !bodyHtml) {
@@ -44,6 +71,8 @@ function main(payloadPath, { repoRoot = process.cwd() } = {}) {
   const longDate = formatDateLong(date);
   const readingTime = estimateReadingTime(bodyHtml);
 
+  const { media, copies } = planMedia({ images, video, slug, title, payloadDir: path.dirname(payloadPath), repoRoot });
+
   const fields = {
     title,
     slug,
@@ -55,6 +84,7 @@ function main(payloadPath, { repoRoot = process.cwd() } = {}) {
     bodyHtml,
     readingTime,
     linkedinUrl,
+    media,
   };
 
   // Build every output in memory first so a failure leaves the repo untouched.
@@ -69,11 +99,15 @@ function main(payloadPath, { repoRoot = process.cwd() } = {}) {
     [sitemapPath, addSitemapEntry(fs.readFileSync(sitemapPath, 'utf8'), { slug, isoDate: date })],
   ];
 
+  for (const [from, to] of copies) {
+    fs.mkdirSync(path.dirname(to), { recursive: true });
+    fs.copyFileSync(from, to);
+  }
   for (const [filePath, content] of outputs) {
     fs.writeFileSync(filePath, content, 'utf8');
   }
 
-  console.log(`Created blog/posts/${slug}.html`);
+  console.log(`Created blog/posts/${slug}.html${copies.length ? ` (+${copies.length} media files in blog/media/${slug}/)` : ''}`);
   console.log('Updated blog/index.html, index.html (#writing), sitemap.xml');
 
   return { slug };

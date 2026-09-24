@@ -28,6 +28,11 @@ user hasn't asked directly, offer it.
    - `linkedinUrl` (optional) — the post's public URL. This becomes a single
      plain link in the post footer ("Originally posted on LinkedIn →") —
      never an embed or iframe.
+   - `images` (optional) — the post's photos, as local file paths (or
+     `{ "src": "...", "alt": "..." }` with a real description). Ask the user
+     for them if the LinkedIn post has photos. They show as a LinkedIn-style
+     grid on the blog feed (max 4, with a "+N" tile) and in full on the post.
+   - `video` (optional) — `"path.mp4"` or `{ "src": "...", "poster": "..." }`.
    - Leave `eyebrow` (defaults to `"Essay"`) and `date` (defaults to today)
      unset unless the user asks for something different.
 
@@ -40,7 +45,8 @@ user hasn't asked directly, offer it.
      "metaDescription": "...",
      "excerpt": "...",
      "bodyHtml": "<p>...</p>",
-     "linkedinUrl": "https://www.linkedin.com/posts/..."
+     "linkedinUrl": "https://www.linkedin.com/posts/...",
+     "images": [{ "src": "C:/path/photo1.jpg", "alt": "Team photo at ..." }]
    }
    ```
 
@@ -50,7 +56,8 @@ user hasn't asked directly, offer it.
    node scripts/blog-from-linkedin/cli.js <path-to-payload.json>
    ```
 
-   This creates `blog/posts/<slug>.html` and updates `blog/index.html`,
+   This creates `blog/posts/<slug>.html`, copies any media into
+   `blog/media/<slug>/`, and updates `blog/index.html`,
    `index.html` (the `#writing` section), and `sitemap.xml`. It prints the
    slug it chose — if a post with a very similar title already exists, it
    will pick `<slug>-2`, etc.
@@ -62,7 +69,7 @@ user hasn't asked directly, offer it.
    no separate review gate — commit and push directly:
 
    ```bash
-   git add blog/posts/<slug>.html blog/index.html index.html sitemap.xml
+   git add blog/posts/<slug>.html blog/media/<slug> blog/index.html index.html sitemap.xml
    git commit -m "Blog: <title>"
    git push
    ```

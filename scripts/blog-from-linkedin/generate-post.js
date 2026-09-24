@@ -39,7 +39,62 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
-function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebrow, bodyHtml, readingTime, linkedinUrl }) {
+const SITE = 'https://safwandotcom.xyz';
+const AUTHOR_NAME = 'Mohammed Safwanul Islam';
+const AUTHOR_ROLE = 'AI & Product Engineer @ PreCognise';
+const FEED_IMAGE_LIMIT = 4;
+
+// `media` describes files already placed in blog/media/<slug>/:
+// { images: [{ file, alt }], video: { file, poster } | null }
+function emptyMedia() {
+  return { images: [], video: null };
+}
+
+// base: path from the page being built to blog/media/<slug>/ (e.g. "media/x/" or "../media/x/").
+// href: where each image links to; null links each image to its own file.
+function buildMediaHtml(media, base, { limit = Infinity, href = null, indent = '' } = {}) {
+  const m = media || emptyMedia();
+  if (m.video) {
+    const poster = m.video.poster ? ` poster="${base}${m.video.poster}"` : '';
+    return `${indent}<div class="media media-video">
+${indent}  <video controls playsinline preload="none"${poster}><source src="${base}${m.video.file}" type="video/mp4"></video>
+${indent}</div>`;
+  }
+  if (!m.images.length) return '';
+
+  const shown = m.images.slice(0, limit);
+  const hidden = m.images.length - shown.length;
+  const layout = shown.length > 4 ? 'n-many' : `n-${shown.length}`;
+  const items = shown.map((img, i) => {
+    const link = href || `${base}${img.file}`;
+    const target = href ? '' : ' target="_blank" rel="noopener"';
+    const more = hidden > 0 && i === shown.length - 1 ? `<span class="media-more">+${hidden}</span>` : '';
+    return `${indent}  <a class="media-item" href="${link}"${target}><img src="${base}${img.file}" alt="${escapeHtml(img.alt)}" loading="lazy" decoding="async">${more}</a>`;
+  });
+  return `${indent}<div class="media ${layout}">
+${items.join('\n')}
+${indent}</div>`;
+}
+
+function buildAuthorHtml({ isoDate, longDate }, avatarSrc, indent = '') {
+  return `${indent}<div class="author">
+${indent}  <img class="author-av" src="${avatarSrc}" alt="" width="44" height="44">
+${indent}  <div class="author-txt">
+${indent}    <span class="author-name">${AUTHOR_NAME}</span>
+${indent}    <span class="author-sub">${escapeHtml(AUTHOR_ROLE)} · <time datetime="${isoDate}">${longDate}</time></span>
+${indent}  </div>
+${indent}</div>`;
+}
+
+function firstImageUrl(slug, media) {
+  const m = media || emptyMedia();
+  const file = m.images.length ? m.images[0].file : m.video && m.video.poster;
+  return file ? `${SITE}/blog/media/${slug}/${file}` : `${SITE}/og.png`;
+}
+
+function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebrow, bodyHtml, readingTime, linkedinUrl, media }) {
+  const ogImage = firstImageUrl(slug, media);
+  const gallery = buildMediaHtml(media, `../media/${slug}/`, { indent: '      ' });
   const escapedTitle = escapeHtml(title);
   const escapedMetaDescription = escapeHtml(metaDescription);
   const escapedEyebrow = escapeHtml(eyebrow);
@@ -54,7 +109,7 @@ function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebro
     "@type": "BlogPosting",
     "headline": title,
     "description": metaDescription,
-    "image": "https://safwandotcom.xyz/og.png",
+    "image": ogImage,
     "datePublished": isoDate,
     "dateModified": isoDate,
     "author": { "@type": "Person", "name": "Mohammed Safwanul Islam", "url": "https://safwandotcom.xyz/" },
@@ -83,11 +138,11 @@ function buildPostHtml({ title, slug, isoDate, longDate, metaDescription, eyebro
 <meta property="og:title" content="${escapedTitle}">
 <meta property="og:description" content="${escapedMetaDescription}">
 <meta property="og:url" content="https://safwandotcom.xyz/blog/posts/${slug}.html">
-<meta property="og:image" content="https://safwandotcom.xyz/og.png">
+<meta property="og:image" content="${ogImage}">
 <meta property="article:published_time" content="${isoDate}">
 <meta property="article:author" content="Mohammed Safwanul Islam">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://safwandotcom.xyz/og.png">
+<meta name="twitter:image" content="${ogImage}">
 <script type="application/ld+json">
 ${jsonLdString}
 </script>
@@ -116,15 +171,12 @@ ${jsonLdString}
       <a class="back" href="../index.html">← All writing</a>
       <p class="eyebrow" style="margin-top:1.5rem">${escapedEyebrow}</p>
       <h1>${escapedTitle}</h1>
-      <div class="meta">
-        <time datetime="${isoDate}">${longDate}</time>
-        <span class="dot"></span>
-        <span>${readingTime} min read</span>
-      </div>
+${buildAuthorHtml({ isoDate, longDate }, '../media/avatar.jpg', '      ')}
+      <p class="meta">${readingTime} min read</p>
     </header>
 
     <div class="prose reading">
-      ${bodyHtml}${linkedinFooter}
+      ${bodyHtml}${gallery ? `\n\n${gallery}` : ''}${linkedinFooter}
     </div>
 
     <footer class="article-foot reading">
@@ -148,17 +200,20 @@ ${jsonLdString}
 
 const ROW_MARKER = '<!-- POST ROW TEMPLATE — newest first -->';
 
-function buildListingRowHtml({ title, slug, isoDate, longDate, excerpt, readingTime }) {
-  return `      <a class="post-row" href="posts/${slug}.html">
-        <div class="post-meta">
-          <time datetime="${isoDate}">${longDate}</time>
-          <span class="dot"></span>
-          <span>${readingTime} min read</span>
-        </div>
-        <h2 class="post-title">${escapeHtml(title)}</h2>
+function buildListingRowHtml({ title, slug, isoDate, longDate, excerpt, readingTime, linkedinUrl, media }) {
+  const postHref = `posts/${slug}.html`;
+  const mediaHtml = buildMediaHtml(media, `media/${slug}/`, { limit: FEED_IMAGE_LIMIT, href: postHref, indent: '        ' });
+  const linkedin = linkedinUrl
+    ? `\n          <a class="feed-li" href="${escapeHtml(linkedinUrl)}" target="_blank" rel="noopener">LinkedIn ↗</a>`
+    : '';
+  return `      <article class="feed-card">
+${buildAuthorHtml({ isoDate, longDate }, 'media/avatar.jpg', '        ')}
+        <h2 class="post-title"><a href="${postHref}">${escapeHtml(title)}</a></h2>
         <p class="post-excerpt">${escapeHtml(excerpt)}</p>
-        <span class="more">Read →</span>
-      </a>`;
+${mediaHtml ? mediaHtml + '\n' : ''}        <div class="feed-foot">
+          <a class="more" href="${postHref}">Read full post · ${readingTime} min →</a>${linkedin}
+        </div>
+      </article>`;
 }
 
 function prependListingRow(blogIndexHtml, rowHtml) {
@@ -244,6 +299,8 @@ module.exports = {
   estimateReadingTime,
   formatDateLong,
   escapeHtml,
+  emptyMedia,
+  buildMediaHtml,
   buildPostHtml,
   buildListingRowHtml,
   prependListingRow,

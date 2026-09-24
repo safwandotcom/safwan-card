@@ -127,3 +127,42 @@ test('todayIso uses the local calendar date, not UTC', () => {
   assert.equal(todayIso(new Date(2026, 8, 24, 23, 59)), '2026-09-24');
   assert.equal(todayIso(new Date(2026, 0, 5, 0, 1)), '2026-01-05');
 });
+
+test('main() copies payload images into blog/media/<slug>/ and references them', () => {
+  const repoRoot = makeFixtureRepo();
+  fs.writeFileSync(path.join(repoRoot, 'a.JPG'), 'img-a');
+  fs.writeFileSync(path.join(repoRoot, 'b.png'), 'img-b');
+  const payloadPath = path.join(repoRoot, 'payload.json');
+  fs.writeFileSync(
+    payloadPath,
+    JSON.stringify({
+      title: 'With Photos', metaDescription: 'm', bodyHtml: '<p>x</p>', date: '2026-09-24',
+      images: ['a.JPG', { src: 'b.png', alt: 'Second photo' }],
+    })
+  );
+
+  main(payloadPath, { repoRoot });
+  const dir = path.join(repoRoot, 'blog', 'media', 'with-photos');
+  assert.equal(fs.readFileSync(path.join(dir, '1.jpg'), 'utf8'), 'img-a');
+  assert.equal(fs.readFileSync(path.join(dir, '2.png'), 'utf8'), 'img-b');
+  const post = fs.readFileSync(path.join(repoRoot, 'blog', 'posts', 'with-photos.html'), 'utf8');
+  assert.match(post, /src="\.\.\/media\/with-photos\/2\.png" alt="Second photo"/);
+  const listing = fs.readFileSync(path.join(repoRoot, 'blog', 'index.html'), 'utf8');
+  assert.match(listing, /src="media\/with-photos\/1\.jpg"/);
+
+  fs.rmSync(repoRoot, { recursive: true, force: true });
+});
+
+test('main() fails before writing anything when a media file is missing', () => {
+  const repoRoot = makeFixtureRepo();
+  const payloadPath = path.join(repoRoot, 'payload.json');
+  fs.writeFileSync(
+    payloadPath,
+    JSON.stringify({ title: 'Missing Photo', metaDescription: 'm', bodyHtml: '<p>x</p>', images: ['nope.jpg'] })
+  );
+
+  assert.throws(() => main(payloadPath, { repoRoot }), /media file not found/);
+  assert.ok(!fs.existsSync(path.join(repoRoot, 'blog', 'posts', 'missing-photo.html')));
+
+  fs.rmSync(repoRoot, { recursive: true, force: true });
+});

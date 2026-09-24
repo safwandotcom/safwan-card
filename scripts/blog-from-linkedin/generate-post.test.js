@@ -6,6 +6,7 @@ const {
   estimateReadingTime,
   formatDateLong,
   buildPostHtml,
+  buildMediaHtml,
   buildListingRowHtml,
   prependListingRow,
   buildHomepagePreviewHtml,
@@ -84,8 +85,30 @@ test('buildPostHtml includes title, canonical URL, and meta description', () => 
 test('buildPostHtml embeds the reshaped body HTML and reading time', () => {
   const html = buildPostHtml(samplePostFields());
   assert.match(html, /<p>Body paragraph one\.<\/p><p>Body paragraph two\.<\/p>/);
-  assert.match(html, /<span>2 min read<\/span>/);
+  assert.match(html, /<p class="meta">2 min read<\/p>/);
   assert.match(html, /<time datetime="2026-09-24">Sep 24, 2026<\/time>/);
+  assert.match(html, /class="author-av" src="\.\.\/media\/avatar\.jpg"/);
+});
+
+test('buildPostHtml shows every image in a gallery and uses the first as the share image', () => {
+  const images = [1, 2, 3, 4, 5].map((n) => ({ file: `${n}.jpg`, alt: `Photo ${n}` }));
+  const html = buildPostHtml(samplePostFields({ media: { images, video: null } }));
+  assert.match(html, /<div class="media n-many">/);
+  assert.equal((html.match(/class="media-item"/g) || []).length, 5);
+  assert.match(html, /<img src="\.\.\/media\/test-post-title\/5\.jpg" alt="Photo 5"/);
+  assert.match(html, /og:image" content="https:\/\/safwandotcom\.xyz\/blog\/media\/test-post-title\/1\.jpg"/);
+  assert.doesNotMatch(html, /media-more/);
+});
+
+test('buildPostHtml falls back to og.png and no gallery without media', () => {
+  const html = buildPostHtml(samplePostFields());
+  assert.match(html, /og:image" content="https:\/\/safwandotcom\.xyz\/og\.png"/);
+  assert.doesNotMatch(html, /class="media/);
+});
+
+test('buildMediaHtml renders a video with its poster', () => {
+  const html = buildMediaHtml({ images: [], video: { file: 'video.mp4', poster: 'video-poster.jpg' } }, 'media/x/');
+  assert.match(html, /<video controls playsinline preload="none" poster="media\/x\/video-poster\.jpg"><source src="media\/x\/video\.mp4"/);
 });
 
 test('buildPostHtml adds a plain LinkedIn footer link when linkedinUrl is set, and omits it otherwise', () => {
@@ -115,7 +138,7 @@ test('buildPostHtml escapes special characters in title, description, eyebrow, a
   assert.doesNotMatch(html, /content="[^"]*<tag>[^"]*"/);
 });
 
-test('buildListingRowHtml renders a post-row anchor with title, date, and excerpt', () => {
+test('buildListingRowHtml renders a feed card with author, title link, excerpt, and read link', () => {
   const row = buildListingRowHtml({
     title: 'Test Post Title',
     slug: 'test-post-title',
@@ -123,12 +146,28 @@ test('buildListingRowHtml renders a post-row anchor with title, date, and excerp
     longDate: 'Sep 24, 2026',
     excerpt: 'A short teaser sentence.',
     readingTime: 2,
+    linkedinUrl: 'https://www.linkedin.com/posts/x',
   });
-  assert.match(row, /<a class="post-row" href="posts\/test-post-title\.html">/);
+  assert.match(row, /<article class="feed-card">/);
+  assert.match(row, /<span class="author-name">Mohammed Safwanul Islam<\/span>/);
   assert.match(row, /<time datetime="2026-09-24">Sep 24, 2026<\/time>/);
-  assert.match(row, /<h2 class="post-title">Test Post Title<\/h2>/);
+  assert.match(row, /<h2 class="post-title"><a href="posts\/test-post-title\.html">Test Post Title<\/a><\/h2>/);
   assert.match(row, /<p class="post-excerpt">A short teaser sentence\.<\/p>/);
-  assert.match(row, /<span>2 min read<\/span>/);
+  assert.match(row, /Read full post · 2 min →/);
+  assert.match(row, /class="feed-li" href="https:\/\/www\.linkedin\.com\/posts\/x"/);
+  assert.doesNotMatch(row, /class="media/);
+});
+
+test('buildListingRowHtml shows at most 4 images linking to the post, with a +N overlay', () => {
+  const images = [1, 2, 3, 4, 5, 6].map((n) => ({ file: `${n}.jpg`, alt: `Photo ${n}` }));
+  const row = buildListingRowHtml({
+    title: 'T', slug: 't', isoDate: '2026-09-24', longDate: 'Sep 24, 2026', excerpt: 'e', readingTime: 1,
+    media: { images, video: null },
+  });
+  assert.match(row, /<div class="media n-4">/);
+  assert.equal((row.match(/class="media-item" href="posts\/t\.html"/g) || []).length, 4);
+  assert.match(row, /<img src="media\/t\/4\.jpg"[^>]*><span class="media-more">\+2<\/span>/);
+  assert.doesNotMatch(row, /5\.jpg/);
 });
 
 test('buildListingRowHtml escapes special characters in title and excerpt', () => {
@@ -142,11 +181,11 @@ test('buildListingRowHtml escapes special characters in title and excerpt', () =
   });
 
   // Check that escaped forms appear in the HTML
-  assert.match(row, /<h2 class="post-title">A &quot;Test&quot; &amp; Post<\/h2>/);
+  assert.match(row, /<h2 class="post-title"><a href="posts\/test-post\.html">A &quot;Test&quot; &amp; Post<\/a><\/h2>/);
   assert.match(row, /<p class="post-excerpt">Text with &lt;tag&gt; &amp; &quot;quotes&quot;\.<\/p>/);
 
   // Check that raw unescaped versions do NOT appear
-  assert.doesNotMatch(row, /<h2 class="post-title">A "Test" & Post<\/h2>/);
+  assert.doesNotMatch(row, />A "Test" & Post</);
   assert.doesNotMatch(row, /excerpt">Text with <tag>/);
 });
 

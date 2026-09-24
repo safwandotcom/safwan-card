@@ -35,7 +35,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..48,400..800&family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="blog.css">
 </head>
-<body>
+<body class="feed-page">
 
 <header class="masthead">
   <div class="masthead-in">
@@ -50,162 +50,272 @@
 </header>
 
 <main>
-  <section class="blog-hero wrap">
-    <p class="eyebrow">Writing</p>
-    <h1>Thoughts, in progress.</h1>
-    <p>Notes on building software people rely on, working with AI, and the messy middle of product engineering. No schedule — just when something's worth writing down.</p>
-  </section>
-
-  <section class="wrap">
-    <div class="post-list">
+  <h1 class="sr-only">Writing by Mohammed Safwanul Islam</h1>
+  <div class="feed">
 
       <!-- POST ROW TEMPLATE — newest first -->
-      <a class="post-row" href="posts/keep-authorization-rules-out-of-route-handlers.html">
-        <div class="post-meta">
-          <time datetime="2026-09-23">Sep 23, 2026</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2026-09-23">Sep 23, 2026</time></span>
+          </div>
         </div>
-        <h2 class="post-title">Keep authorization rules out of route handlers</h2>
+        <h2 class="post-title"><a href="posts/keep-authorization-rules-out-of-route-handlers.html">Keep authorization rules out of route handlers</a></h2>
         <p class="post-excerpt">Every authorization bug I have seen had the same shape. One pure function fixes it.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/the-filename-on-an-uploaded-file-is-user-input.html">
-        <div class="post-meta">
-          <time datetime="2026-09-23">Sep 23, 2026</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+        <div class="media n-1">
+          <a class="media-item" href="posts/keep-authorization-rules-out-of-route-handlers.html"><img src="media/keep-authorization-rules-out-of-route-handlers/1.jpg" alt="Code: a pure recruiterHasJobAccess function with the institution null check" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">The filename on an uploaded file is user input</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/keep-authorization-rules-out-of-route-handlers.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_softwareengineering-cleancode-backenddevelopment-share-7508319508906889216-HsAn/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2026-09-23">Sep 23, 2026</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/the-filename-on-an-uploaded-file-is-user-input.html">The filename on an uploaded file is user input</a></h2>
         <p class="post-excerpt">Most of us treat it like metadata. Sanitizing it isn&#39;t the fix; not using it is.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/building-a-safe-view-as-user-feature.html">
-        <div class="post-meta">
-          <time datetime="2026-09-22">Sep 22, 2026</time>
-          <span class="dot"></span>
-          <span>1 min read</span>
+        <div class="media n-1">
+          <a class="media-item" href="posts/the-filename-on-an-uploaded-file-is-user-input.html"><img src="media/the-filename-on-an-uploaded-file-is-user-input/1.jpg" alt="Code: building a safe filename from trusted data for the Content-Disposition header" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">Building a safe &quot;view as user&quot; feature</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/the-filename-on-an-uploaded-file-is-user-input.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_websecurity-appsec-softwareengineering-share-7508295096359112704-oJX-/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2026-09-22">Sep 22, 2026</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/building-a-safe-view-as-user-feature.html">Building a safe &quot;view as user&quot; feature</a></h2>
         <p class="post-excerpt">The safest version only ever mutates one field on the user object, never the session itself.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/meeting-ucsis-leadership-in-bangladesh.html">
-        <div class="post-meta">
-          <time datetime="2026-09-21">Sep 21, 2026</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+        <div class="media n-1">
+          <a class="media-item" href="posts/building-a-safe-view-as-user-feature.html"><img src="media/building-a-safe-view-as-user-feature/1.jpg" alt="Code: getCurrentUser applies an admin override to a single userType field" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">Meeting UCSI&#39;s leadership in Bangladesh</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/building-a-safe-view-as-user-feature.html">Read full post · 1 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_softwareengineering-appsec-backenddevelopment-share-7507983661930123264-ZgFL/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2026-09-21">Sep 21, 2026</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/meeting-ucsis-leadership-in-bangladesh.html">Meeting UCSI&#39;s leadership in Bangladesh</a></h2>
         <p class="post-excerpt">A meetup with UCSI&#39;s Vice-Chancellor and the people building the Bangladesh campus.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/back-where-the-journey-began.html">
-        <div class="post-meta">
-          <time datetime="2026-09-19">Sep 19, 2026</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+        <div class="media n-3">
+          <a class="media-item" href="posts/meeting-ucsis-leadership-in-bangladesh.html"><img src="media/meeting-ucsis-leadership-in-bangladesh/1.jpg" alt="Group photo at the meetup with UCSI leadership in Bangladesh" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/meeting-ucsis-leadership-in-bangladesh.html"><img src="media/meeting-ucsis-leadership-in-bangladesh/2.jpg" alt="Alumni with the Vice-Chancellor at the meetup" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/meeting-ucsis-leadership-in-bangladesh.html"><img src="media/meeting-ucsis-leadership-in-bangladesh/3.jpg" alt="Guests and alumni at the UCSI Bangladesh event" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">Back where the journey began</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/meeting-ucsis-leadership-in-bangladesh.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_ucsiuniversity-ucsibangladesh-alumni-ugcPost-7507535157369913344-wuM2/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2026-09-19">Sep 19, 2026</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/back-where-the-journey-began.html">Back where the journey began</a></h2>
         <p class="post-excerpt">Meeting students at UCSI Bangladesh as an alumnus. We left with more than we gave.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/a-fake-bdjobs-email-and-the-trust-gap-in-hiring.html">
-        <div class="post-meta">
-          <time datetime="2026-09-19">Sep 19, 2026</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+        <div class="media n-1">
+          <a class="media-item" href="posts/back-where-the-journey-began.html"><img src="media/back-where-the-journey-began/1.jpg" alt="Alumni and staff at the UCSI University Bangladesh Branch Campus meet and greet" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">A fake BDJobs email, and the trust gap in hiring</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/back-where-the-journey-began.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_ucsiuniversity-ucsibangladesh-alumni-share-7507083844978786304-0h8C/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2026-09-19">Sep 19, 2026</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/a-fake-bdjobs-email-and-the-trust-gap-in-hiring.html">A fake BDJobs email, and the trust gap in hiring</a></h2>
         <p class="post-excerpt">A phishing email dressed up as BDJobs, and why hiring cannot keep running on blind trust.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/graduating-from-ucsi-university.html">
-        <div class="post-meta">
-          <time datetime="2026-05-20">May 20, 2026</time>
-          <span class="dot"></span>
-          <span>1 min read</span>
+        <div class="media n-1">
+          <a class="media-item" href="posts/a-fake-bdjobs-email-and-the-trust-gap-in-hiring.html"><img src="media/a-fake-bdjobs-email-and-the-trust-gap-in-hiring/1.jpg" alt="Screenshot of the phishing email posing as BDJobs, sent from prothomsir.com" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">Graduating from UCSI University</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/a-fake-bdjobs-email-and-the-trust-gap-in-hiring.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_jobscamalert-phishingawareness-bangladesh-share-7506874463183904768-A0pX/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2026-05-20">May 20, 2026</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/graduating-from-ucsi-university.html">Graduating from UCSI University</a></h2>
         <p class="post-excerpt">Bachelor of Computer Engineering (AI) with Honours, 39th Convocation of UCSI University.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/building-real-time-pose-detection-with-openpose.html">
-        <div class="post-meta">
-          <time datetime="2024-12-04">Dec 4, 2024</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+        <div class="media n-4">
+          <a class="media-item" href="posts/graduating-from-ucsi-university.html"><img src="media/graduating-from-ucsi-university/1.jpg" alt="In graduation robes at the Faculty of Engineering, Technology and Built Environment" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/graduating-from-ucsi-university.html"><img src="media/graduating-from-ucsi-university/2.jpg" alt="Holding the degree scroll in front of the UCSI backdrop" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/graduating-from-ucsi-university.html"><img src="media/graduating-from-ucsi-university/3.jpg" alt="With a friend on convocation day" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/graduating-from-ucsi-university.html"><img src="media/graduating-from-ucsi-university/4.jpg" alt="Beside the UCSI sign on campus" loading="lazy" decoding="async"><span class="media-more">+1</span></a>
         </div>
-        <h2 class="post-title">Building real-time pose detection with OpenPose</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/graduating-from-ucsi-university.html">Read full post · 1 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_i-am-incredibly-honored-to-graduate-from-ugcPost-7462607667501367296-Tpcq/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2024-12-04">Dec 4, 2024</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/building-real-time-pose-detection-with-openpose.html">Building real-time pose detection with OpenPose</a></h2>
         <p class="post-excerpt">Real-time, multi-person pose detection, built in the last two days of my internship.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/presenting-a-sleep-pattern-analysis-at-kidocode.html">
-        <div class="post-meta">
-          <time datetime="2024-10-31">Oct 31, 2024</time>
-          <span class="dot"></span>
-          <span>1 min read</span>
+        <div class="media media-video">
+          <video controls playsinline preload="none" poster="media/building-real-time-pose-detection-with-openpose/video-poster.jpg"><source src="media/building-real-time-pose-detection-with-openpose/video.mp4" type="video/mp4"></video>
         </div>
-        <h2 class="post-title">Presenting a sleep-pattern analysis at KidoCode</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/building-real-time-pose-detection-with-openpose.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_kidocode-internship-openpose-ugcPost-7270008485994471424-HlAy/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2024-10-31">Oct 31, 2024</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/presenting-a-sleep-pattern-analysis-at-kidocode.html">Presenting a sleep-pattern analysis at KidoCode</a></h2>
         <p class="post-excerpt">A descriptive analysis of sleep patterns in 18 to 25 year olds, presented to fellow interns.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/scholarship-training-for-ucsi-staff-and-student-ambassadors.html">
-        <div class="post-meta">
-          <time datetime="2024-10-23">Oct 23, 2024</time>
-          <span class="dot"></span>
-          <span>1 min read</span>
+        <div class="media n-4">
+          <a class="media-item" href="posts/presenting-a-sleep-pattern-analysis-at-kidocode.html"><img src="media/presenting-a-sleep-pattern-analysis-at-kidocode/1.jpg" alt="Interns watching the sleep-pattern data presentation" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/presenting-a-sleep-pattern-analysis-at-kidocode.html"><img src="media/presenting-a-sleep-pattern-analysis-at-kidocode/2.jpg" alt="Presenting the descriptive analysis to the interns" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/presenting-a-sleep-pattern-analysis-at-kidocode.html"><img src="media/presenting-a-sleep-pattern-analysis-at-kidocode/3.jpg" alt="The audience of interns during the presentation" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/presenting-a-sleep-pattern-analysis-at-kidocode.html"><img src="media/presenting-a-sleep-pattern-analysis-at-kidocode/4.jpg" alt="The presentation room at KidoCode" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">Scholarship training for UCSI staff and student ambassadors</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/presenting-a-sleep-pattern-analysis-at-kidocode.html">Read full post · 1 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_kidocode-interns-montkiara-ugcPost-7257692460703723520-9RGv/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2024-10-23">Oct 23, 2024</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/scholarship-training-for-ucsi-staff-and-student-ambassadors.html">Scholarship training for UCSI staff and student ambassadors</a></h2>
         <p class="post-excerpt">Learning how to promote scholarships and talk with prospective students and parents.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/another-intern-meeting-at-kidocode.html">
-        <div class="post-meta">
-          <time datetime="2024-10-18">Oct 18, 2024</time>
-          <span class="dot"></span>
-          <span>1 min read</span>
+        <div class="media n-3">
+          <a class="media-item" href="posts/scholarship-training-for-ucsi-staff-and-student-ambassadors.html"><img src="media/scholarship-training-for-ucsi-staff-and-student-ambassadors/1.jpg" alt="Group photo at the UCSI scholarship training" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/scholarship-training-for-ucsi-staff-and-student-ambassadors.html"><img src="media/scholarship-training-for-ucsi-staff-and-student-ambassadors/2.jpg" alt="Scholarship training session with slides on screen" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/scholarship-training-for-ucsi-staff-and-student-ambassadors.html"><img src="media/scholarship-training-for-ucsi-staff-and-student-ambassadors/3.jpg" alt="Staff and student ambassadors in the training room" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">Another intern meeting at KidoCode</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/scholarship-training-for-ucsi-staff-and-student-ambassadors.html">Read full post · 1 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_ucsi-training-studentambassadors-ugcPost-7254692794613547008-vfTT/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2024-10-18">Oct 18, 2024</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/another-intern-meeting-at-kidocode.html">Another intern meeting at KidoCode</a></h2>
         <p class="post-excerpt">Wellbeing, new faces, and looking back at what we had learned so far.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/the-purpose-of-meetings-beyond-updates-and-games.html">
-        <div class="post-meta">
-          <time datetime="2024-10-09">Oct 9, 2024</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+        <div class="media n-1">
+          <a class="media-item" href="posts/another-intern-meeting-at-kidocode.html"><img src="media/another-intern-meeting-at-kidocode/1.jpg" alt="Online intern meeting with the KidoCode team on a video call" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">The purpose of meetings: beyond updates and games</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/another-intern-meeting-at-kidocode.html">Read full post · 1 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_internship-teamwork-learning-share-7252891556632764417-El8H/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2024-10-09">Oct 9, 2024</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/the-purpose-of-meetings-beyond-updates-and-games.html">The purpose of meetings: beyond updates and games</a></h2>
         <p class="post-excerpt">Meetings are more than updates and icebreakers. Here is what they are actually for.</p>
-        <span class="more">Read →</span>
-      </a>
-
-      <a class="post-row" href="posts/internship-beyond-the-classroom.html">
-        <div class="post-meta">
-          <time datetime="2024-10-02">Oct 2, 2024</time>
-          <span class="dot"></span>
-          <span>2 min read</span>
+        <div class="media n-2">
+          <a class="media-item" href="posts/the-purpose-of-meetings-beyond-updates-and-games.html"><img src="media/the-purpose-of-meetings-beyond-updates-and-games/1.jpg" alt="Group photo of the interns after the meeting" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/the-purpose-of-meetings-beyond-updates-and-games.html"><img src="media/the-purpose-of-meetings-beyond-updates-and-games/2.jpg" alt="Interns gathered for a team meeting in the KidoCode office" loading="lazy" decoding="async"></a>
         </div>
-        <h2 class="post-title">Internship: beyond the classroom</h2>
+        <div class="feed-foot">
+          <a class="more" href="posts/the-purpose-of-meetings-beyond-updates-and-games.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_kidocode-malaysia-montkiara-ugcPost-7249644906632130560-UqAy/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="feed-card">
+        <div class="author">
+          <img class="author-av" src="media/avatar.jpg" alt="" width="44" height="44">
+          <div class="author-txt">
+            <span class="author-name">Mohammed Safwanul Islam</span>
+            <span class="author-sub">AI &amp; Product Engineer @ PreCognise · <time datetime="2024-10-02">Oct 2, 2024</time></span>
+          </div>
+        </div>
+        <h2 class="post-title"><a href="posts/internship-beyond-the-classroom.html">Internship: beyond the classroom</a></h2>
         <p class="post-excerpt">Internships are a game-changer, offering experience you simply cannot get in a classroom.</p>
-        <span class="more">Read →</span>
-      </a>
+        <div class="media n-4">
+          <a class="media-item" href="posts/internship-beyond-the-classroom.html"><img src="media/internship-beyond-the-classroom/1.jpg" alt="Interns working at their computers at KidoCode" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/internship-beyond-the-classroom.html"><img src="media/internship-beyond-the-classroom/2.jpg" alt="Group photo of the KidoCode interns" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/internship-beyond-the-classroom.html"><img src="media/internship-beyond-the-classroom/3.jpg" alt="A presentation to the team at KidoCode" loading="lazy" decoding="async"></a>
+          <a class="media-item" href="posts/internship-beyond-the-classroom.html"><img src="media/internship-beyond-the-classroom/4.jpg" alt="Selfie with fellow interns at KidoCode" loading="lazy" decoding="async"></a>
+        </div>
+        <div class="feed-foot">
+          <a class="more" href="posts/internship-beyond-the-classroom.html">Read full post · 2 min →</a>
+          <a class="feed-li" href="https://www.linkedin.com/posts/safwandotcom_kidocode-internship-malaysia-ugcPost-7247106217280503808-KJMW/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
 
-
-    </div>
-  </section>
+  </div>
 </main>
 
 <footer class="blog-footer">
